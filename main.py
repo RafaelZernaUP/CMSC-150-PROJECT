@@ -1,29 +1,9 @@
+import food
 import csv
-import constants as C
 
 csv_path = r"Food Data.csv"
 
 headings: list
-store = {}
-
-class food():
-    def __init__(self, data:list):
-        self.name = data[C.NAME]
-        self.costPerServing = data[C.COSTPERSERVING]
-        self.servingSize = data[C.SERVINGSIZE]
-        self.calories = data[C.CALORIES]
-        self.totalFat = data[C.TOTALFAT]
-        self.sodium = data[C.SODIUM]
-        self.carbohydrates = data[C.CARBOHYDRATES]
-        self.dietaryFiber = data[C.DIETARYFIBER]
-        self.protein = data[C.PROTEIN]
-        self.vitaminA = data[C.VITAMINA]
-        self.vitaminC = data[C.VITAMINC]
-        self.calcium = data[C.CALCIUM]
-        self.iron = data[C.IRON]
-
-
-
 
 def load_csv():
    with open(csv_path, mode ='r') as file:
@@ -33,9 +13,7 @@ def load_csv():
         if line[0] == 'Foods':
             headings = line
             continue
-        new: food = food(line)
-        store[counter] = food(line)
-        counter += 1
+        food.food(line)
 
 load_csv()
-print(store[0].name)
+print(food.food.getList())
