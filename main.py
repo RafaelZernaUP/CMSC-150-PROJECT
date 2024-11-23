@@ -1,8 +1,7 @@
 import csv
 import constants as C
 
-# hello git hi    
-
+csv_path = r"Food Data.csv"
 
 headings: list
 store = {}
@@ -23,7 +22,7 @@ class food():
         self.calcium = data[C.CALCIUM]
         self.iron = data[C.IRON]
 
-csv_path = r"G:\My Drive\Personal\CMSC 150 Project\Food Data.csv"
+
 
 
 def load_csv():
