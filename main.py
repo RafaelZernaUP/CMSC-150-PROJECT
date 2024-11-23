@@ -1,5 +1,5 @@
 from food import food as fc
-# from server import 
+from server import server as sv
 
 # load food list
 csv_path = r"Food Data.csv"
@@ -8,6 +8,9 @@ fc.load(csv_path)
 # initialize index page using food list
 
 # start server
+sv.start()
+
+
 
 # listen for form submission
 
