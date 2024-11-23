@@ -17,6 +17,7 @@ IRON = 12
 class food():
 
     __foodList = {}
+    __headings: list
 
     def __init__(self, data:list):
         self.__name:str = data[NAME]
@@ -34,6 +35,16 @@ class food():
         self.__iron:float = data[IRON]
         food.__foodList[self.__name] = self
     
+    def load(path):
+        with open(path, mode ='r') as file:
+            csvFile = csv.reader(file)
+            for line in csvFile:
+                if line[0] == 'Foods':
+                    food.__headings = line
+                    continue
+                food(line)
+
+
     def getList():
         return food.__foodList
     

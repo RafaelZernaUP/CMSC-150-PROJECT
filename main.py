@@ -1,19 +1,23 @@
-import food
-import csv
+from food import food as fc
+# from server import 
 
+# load food list
 csv_path = r"Food Data.csv"
+fc.load(csv_path)
 
-headings: list
+# initialize index page using food list
 
-def load_csv():
-   with open(csv_path, mode ='r') as file:
-      csvFile = csv.reader(file)
-      counter = 0
-      for line in csvFile:
-        if line[0] == 'Foods':
-            headings = line
-            continue
-        food.food(line)
+# start server
 
-load_csv()
-print(food.food.getList())
+# listen for form submission
+
+# parse submission
+
+# solve and prepare solution page
+
+# set page to solution page
+
+
+
+
+print(fc.getList())
