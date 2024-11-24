@@ -1,7 +1,7 @@
 from food import food as fc
 
-ZERO_V        = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-
+ZERO_V = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+ANS_V = [2000,2500,300,65,2400,300,25,100,50,100,5000,50000,50,20000,800,1600,10,30]
 S_VARS = [
 [-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ,[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -33,10 +33,9 @@ class solution():
         self.constructTableau(foods)
         self.solve()
     
-    def constructTableau(foods:list):
+    def constructTableau(foods:list): # include self here later
         matrix = []
         coefficients = [[],[],[],[],[],[],[],[],[],[],[],[]]
-        servings = []
         serve_0 = []
         for a in range(len(foods)):
             serve_0.append(0)
@@ -46,7 +45,6 @@ class solution():
 
         for c in range(len(coefficients) + len(serve_0)):
             if c < len(coefficients) - 1:
-                print(c)
                 if c == 0:
                     matrix.append(coefficients[c] + S_VARS[c].copy() + serve_0.copy())
                     matrix.append(coefficients[c] + S_VARS[c+1].copy() + serve_0.copy())
@@ -55,12 +53,24 @@ class solution():
                     matrix.append(coefficients[c] + S_VARS[2*c-3].copy() + serve_0.copy())
                 else:
                     matrix.append(coefficients[c] + S_VARS[c+1].copy() + serve_0.copy())
-
-
-
-
-
-
+            elif c < len(coefficients) - 1 + len(serve_0):
+                temp = serve_0.copy()
+                temp[c - len(coefficients) + 1] = 1
+                matrix.append(temp + ZERO_V + temp)
+            else:
+                matrix.append(coefficients[-1] + ZERO_V.copy() + serve_0.copy())
+                for d in range(len(matrix)):
+                    if d < len(S_VARS):
+                        matrix[d].append(0)
+                        matrix[d].append(ANS_V[d])
+                    elif d < len(matrix) - 1:
+                        matrix[d].append(0)
+                        matrix[d].append(10)
+                    else:
+                        matrix[d].append(1)
+                        matrix[d].append(0)
+        
+        # self.__initTableau = matrix.copy()
         solution.printMatrix(matrix)
 
     def solve(self):
@@ -71,11 +81,6 @@ class solution():
     
     def getBasicSolutions(self):
         return self.__basicSolutions
-    
-    def transpose(matrix):
-        new = []
-        for i in matrix:
-            new.append()
     
     def printMatrix(matrix:list):
         for i in matrix:
