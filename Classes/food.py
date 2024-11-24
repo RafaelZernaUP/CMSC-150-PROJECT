@@ -4,15 +4,16 @@ NAME = 0
 COSTPERSERVING = 1
 SERVINGSIZE = 2
 CALORIES = 3
-TOTALFAT = 4
-SODIUM = 5
-CARBOHYDRATES = 6
-DIETARYFIBER = 7
-PROTEIN = 8
-VITAMINA = 9
-VITAMINC = 10
-CALCIUM = 11
-IRON = 12
+CHOLESTEROL = 4
+TOTALFAT = 5
+SODIUM = 6
+CARBOHYDRATES = 7
+DIETARYFIBER = 8
+PROTEIN = 9
+VITAMINA = 10
+VITAMINC = 11
+CALCIUM = 12
+IRON = 13
 
 class food():
 
@@ -22,18 +23,19 @@ class food():
 
     def __init__(self, data:list):
         self.__name:str = data[NAME]
-        self.__costPerServing:float = data[COSTPERSERVING]
+        self.__costPerServing:float = float(data[COSTPERSERVING])
         self.__servingSize:str = data[SERVINGSIZE]
-        self.__calories:float = data[CALORIES]
-        self.__totalFat:float = data[TOTALFAT]
-        self.__sodium:float = data[SODIUM]
-        self.__carbohydrates:float = data[CARBOHYDRATES]
-        self.__dietaryFiber:float = data[DIETARYFIBER]
-        self.__protein:float = data[PROTEIN]
-        self.__vitaminA:float = data[VITAMINA]
-        self.__vitaminC:float = data[VITAMINC]
-        self.__calcium:float = data[CALCIUM]
-        self.__iron:float = data[IRON]
+        self.__calories:float = float(data[CALORIES])
+        self.__cholesterol:float = float(data[CHOLESTEROL])
+        self.__totalFat:float = float(data[TOTALFAT])
+        self.__sodium:float = float(data[SODIUM])
+        self.__carbohydrates:float = float(data[CARBOHYDRATES])
+        self.__dietaryFiber:float = float(data[DIETARYFIBER])
+        self.__protein:float = float(data[PROTEIN])
+        self.__vitaminA:float = float(data[VITAMINA])
+        self.__vitaminC:float = float(data[VITAMINC])
+        self.__calcium:float = float(data[CALCIUM])
+        self.__iron:float = float(data[IRON])
         food.__foodList[self.__name] = self
         food.__foodNames.append(self.__name)
     
@@ -51,6 +53,25 @@ class food():
     
     def getNames():
         return food.__foodNames
+    
+    def getCoefficients(self):
+        return [
+            self.__calories,
+            self.__cholesterol,
+            self.__totalFat,
+            self.__sodium,
+            self.__carbohydrates,
+            self.__dietaryFiber,
+            self.__protein,
+            self.__vitaminA,
+            self.__vitaminC,
+            self.__calcium,
+            self.__iron,
+            self.__costPerServing
+            ]
+    
+    def getHeadings():
+        return food.__headings
 
     def getName(self):
         return self.__name

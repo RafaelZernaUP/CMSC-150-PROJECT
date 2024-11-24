@@ -1,5 +1,6 @@
 from food import food as fc
 from server import server as sv
+from solution import solution
 from os import path
 
 
@@ -17,23 +18,21 @@ def chooser():
 
 def finder():
     list = fc.getList()
-    toDo = []
     for e in chosen:
         toDo.append(list[e])
-    for j in toDo:
-        print(j.getCalories())
 
 # load food list
 csv_path = path.join('Data','Food Data.csv')
 fc.load(csv_path)
 foodNames = fc.getNames()
 
-while(True):
-    chosen = []
-    i_s = []
-    chooser()
-    finder()
-    break
+
+chosen = []
+i_s = []
+toDo = []
+chooser()
+finder()
+solution.constructTableau(toDo)
 
 
 
