@@ -18,6 +18,7 @@ class food():
 
     __foodList = {}
     __headings: list
+    __foodNames = []
 
     def __init__(self, data:list):
         self.__name:str = data[NAME]
@@ -34,6 +35,7 @@ class food():
         self.__calcium:float = data[CALCIUM]
         self.__iron:float = data[IRON]
         food.__foodList[self.__name] = self
+        food.__foodNames.append(self.__name)
     
     def load(path):
         with open(path, mode ='r') as file:
@@ -43,11 +45,13 @@ class food():
                     food.__headings = line
                     continue
                 food(line)
-
-
+    
     def getList():
         return food.__foodList
     
+    def getNames():
+        return food.__foodNames
+
     def getName(self):
         return self.__name
     def getCost(self):
