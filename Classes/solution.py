@@ -1,4 +1,5 @@
 from food import food as fc
+import copy
 
 ZERO_V = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ANS_V = [2000,2500,300,65,2400,300,25,100,50,100,5000,50000,50,20000,800,1600,10,30]
@@ -25,15 +26,16 @@ S_VARS = [
 
 class solution():
 
-    def solution(self, foods:list):
+    def __init__(self, foods:list):
         __initTableau: list
         __workingTableaus: list
         __basicSolutions: list
         __Z: float
         self.constructTableau(foods)
-        self.solve()
+        #self.solve()
+        solution.printMatrix(self.__initTableau)
     
-    def constructTableau(foods:list): # include self here later
+    def constructTableau(self, foods:list): # include self here later
         matrix = []
         coefficients = [[],[],[],[],[],[],[],[],[],[],[],[]]
         serve_0 = []
@@ -46,19 +48,19 @@ class solution():
         for c in range(len(coefficients) + len(serve_0)):
             if c < len(coefficients) - 1:
                 if c == 0:
-                    matrix.append(coefficients[c].copy() + S_VARS[c].copy() + serve_0.copy())
-                    matrix.append(coefficients[c].copy() + S_VARS[c+1].copy() + serve_0.copy())
+                    matrix.append(copy.deepcopy(coefficients[c]) + copy.deepcopy(S_VARS[c]) + copy.deepcopy(serve_0))
+                    matrix.append(copy.deepcopy(coefficients[c]) + copy.deepcopy(S_VARS[c+1]) + copy.deepcopy(serve_0))
                 elif c >= 5:
-                    matrix.append(coefficients[c].copy() + S_VARS[2*c-4].copy() + serve_0.copy())
-                    matrix.append(coefficients[c].copy() + S_VARS[2*c-3].copy() + serve_0.copy())
+                    matrix.append(copy.deepcopy(coefficients[c]) + copy.deepcopy(S_VARS[2*c-4]) + copy.deepcopy(serve_0))
+                    matrix.append(copy.deepcopy(coefficients[c]) + copy.deepcopy(S_VARS[2*c-3]) + copy.deepcopy(serve_0))
                 else:
-                    matrix.append(coefficients[c].copy() + S_VARS[c+1].copy() + serve_0.copy())
+                    matrix.append(copy.deepcopy(coefficients[c]) + copy.deepcopy(S_VARS[c+1]) + copy.deepcopy(serve_0))
             elif c < len(coefficients) - 1 + len(serve_0):
-                temp = serve_0.copy()
+                temp = copy.deepcopy(serve_0)
                 temp[c - len(coefficients) + 1] = 1
-                matrix.append(temp.copy() + ZERO_V.copy() + temp.copy())
+                matrix.append(copy.deepcopy(temp) + copy.deepcopy(ZERO_V) + copy.deepcopy(temp))
             else:
-                matrix.append(coefficients[-1].copy() + ZERO_V.copy() + serve_0.copy())
+                matrix.append(copy.deepcopy(coefficients[-1]) + copy.deepcopy(ZERO_V) + copy.deepcopy(serve_0))
                 for d in range(len(matrix)):
                     if d < len(S_VARS):
                         matrix[d].append(0)
@@ -70,8 +72,7 @@ class solution():
                         matrix[d].append(1)
                         matrix[d].append(0)
         
-        # self.__initTableau = matrix.deepcopy()
-        solution.printMatrix(matrix)
+        self.__initTableau = copy.deepcopy(matrix)
 
     def solve(self):
         pass

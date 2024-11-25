@@ -32,7 +32,7 @@ i_s = []
 toDo = []
 chooser()
 finder()
-solution.constructTableau(toDo)
+solution(toDo)
 
 
 
