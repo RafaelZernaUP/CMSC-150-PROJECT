@@ -46,19 +46,19 @@ class solution():
         for c in range(len(coefficients) + len(serve_0)):
             if c < len(coefficients) - 1:
                 if c == 0:
-                    matrix.append(coefficients[c] + S_VARS[c].deepcopy() + serve_0.deepcopy())
-                    matrix.append(coefficients[c] + S_VARS[c+1].deepcopy() + serve_0.deepcopy())
+                    matrix.append(coefficients[c].copy() + S_VARS[c].copy() + serve_0.copy())
+                    matrix.append(coefficients[c].copy() + S_VARS[c+1].copy() + serve_0.copy())
                 elif c >= 5:
-                    matrix.append(coefficients[c] + S_VARS[2*c-4].deepcopy() + serve_0.deepcopy())
-                    matrix.append(coefficients[c] + S_VARS[2*c-3].deepcopy() + serve_0.deepcopy())
+                    matrix.append(coefficients[c].copy() + S_VARS[2*c-4].copy() + serve_0.copy())
+                    matrix.append(coefficients[c].copy() + S_VARS[2*c-3].copy() + serve_0.copy())
                 else:
-                    matrix.append(coefficients[c] + S_VARS[c+1].deepcopy() + serve_0.deepcopy())
+                    matrix.append(coefficients[c].copy() + S_VARS[c+1].copy() + serve_0.copy())
             elif c < len(coefficients) - 1 + len(serve_0):
-                temp = serve_0.deepcopy()
+                temp = serve_0.copy()
                 temp[c - len(coefficients) + 1] = 1
-                matrix.append(temp + ZERO_V + temp)
+                matrix.append(temp.copy() + ZERO_V.copy() + temp.copy())
             else:
-                matrix.append(coefficients[-1] + ZERO_V.deepcopy() + serve_0.deepcopy())
+                matrix.append(coefficients[-1].copy() + ZERO_V.copy() + serve_0.copy())
                 for d in range(len(matrix)):
                     if d < len(S_VARS):
                         matrix[d].append(0)
