@@ -39,8 +39,9 @@ class solution():
         __basicSolutions: list
         __Z: float
         self.constructTableau(foods)
-        #self.solve()
-        solution.printMatrix(self.__initTableau)
+        #self.
+        solution.solve(self.__initTableau)
+        #solution.printMatrix(self.__initTableau)
     
     def constructTableau(self, foods:list): # include self here later
         matrix = []
@@ -81,14 +82,14 @@ class solution():
         
         self.__initTableau = copy(matrix)
 
-    def solve():
+    def solve(matrix:list):
         sample = copy(SAMPLE)
         
-        solution.printMatrix(sample)
+        #solution.printMatrix(matrix)
 
-        solution.fixNegaBasic(sample)
+        solution.fixNegaBasic(matrix)
 
-        solution.printMatrix(sample)
+        solution.printMatrix(matrix)
 
         # find largest negative in last row -> y
         # find least positive ratio -> x
@@ -123,17 +124,19 @@ class solution():
             basicVars = (solution.findBasicVars(matrix))[:-1]
             basicVars.reverse()
             leave = False
+            solution.printMatrix(matrix)
+            input()
             for a in basicVars:
                 if matrix[a[0]][-1]/matrix[a[0]][a[1]] < 0: 
                     for c in range(len(matrix[a[0]])):
-                        if matrix[a[0]][c] > 0:
+                        if matrix[a[0]][c] > 0 and c != a[1]:
                             solution.operate(matrix, a[0], c)
                             leave = True
                             break
                 elif matrix[a[0]][a[1]] == -1:
                     for b in range(len(matrix[a[0]])):
                         matrix[a[0]][b] = -1*matrix[a[0]][b]
-                    leave = True
+                        leave = True
                 if leave:
                     break
             else:
@@ -170,5 +173,5 @@ class solution():
     def printMatrix(matrix:list):
         for i in matrix:
             for j in i:
-                print(f"{j:.3f}", end="\t\t")
+                print(f"{j:.1f}", end="\t")
             print()

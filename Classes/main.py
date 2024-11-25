@@ -3,8 +3,6 @@ from server import server as sv
 from solution import solution
 from os import path
 
-solution.solve()
-
 
 def chooser():
     while(True):
@@ -24,17 +22,17 @@ def finder():
         toDo.append(list[e])
 
 # load food list
-#csv_path = path.join('Data','Food Data.csv')
-#fc.load(csv_path)
-#foodNames = fc.getNames()
+csv_path = path.join('Data','Food Data.csv')
+fc.load(csv_path)
+foodNames = fc.getNames()
 
 
-#chosen = []
-#i_s = []
-#toDo = []
-#chooser()
-#finder()
-#solution(toDo)
+chosen = []
+i_s = []
+toDo = []
+chooser()
+finder()
+solution(toDo)
 
 
 # initialize index page using food list
