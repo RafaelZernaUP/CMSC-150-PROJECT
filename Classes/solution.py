@@ -135,7 +135,29 @@ class solution():
             else:
                 basicVars.append((x,y))
         return copy(basicVars)
+
+    def findBasicSoln(matrix:list) -> list:
         
+        basicVars = solution.findBasicVars(matrix)
+        basicCols = []
+        basicRows = []
+        basicSolns = []
+        for a in basicVars:
+            basicCols.append(a[1])
+            basicRows.append(a[0])
+
+        rowIndex = 0
+        for b in range(len(matrix[0])-1):
+            if b not in basicCols:
+                basicSolns.append(0)
+            else:
+                basicSolns.append(matrix[basicRows[rowIndex]][-1])
+                rowIndex += 1
+        
+        solution.printRow(basicSolns)
+        
+        return copy(basicSolns)
+
     def fixNegaBasic(matrix:list):
         while(True):
             basicVars = (solution.findBasicVars(matrix))[:-1]
@@ -162,6 +184,9 @@ class solution():
     def fixNegaLastRow(matrix:list) -> int:
         while(True):
             
+            solution.findBasicSoln(matrix)
+            print()
+
             # find largest negative
             col = -1
             max = 0
@@ -222,3 +247,8 @@ class solution():
             for j in i:
                 print(f"{j:.1f}", end="\t")
             print()
+
+    def printRow(list:list):
+        for i in list:
+            print(f"{i:.1f}", end="\t")
+        print()
