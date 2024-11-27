@@ -3,6 +3,7 @@ from server import server as sv
 from solution import solution
 from os import path
 
+solution.solve()
 
 def chooser():
     while(True):
@@ -30,9 +31,9 @@ foodNames = fc.getNames()
 chosen = []
 i_s = []
 toDo = []
-chooser()
-finder()
-solution(toDo)
+#chooser()
+#finder()
+#solution(toDo)
 
 
 # initialize index page using food list

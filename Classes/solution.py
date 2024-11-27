@@ -1,6 +1,11 @@
 from food import food as fc
 from copy import deepcopy as copy
 
+
+SOLVED = 0
+NO_ANS = 1
+MULTI_ANS = 2
+
 ZERO_V = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ANS_V = [2000,2500,300,65,2400,300,25,100,50,100,5000,50000,50,20000,800,1600,10,30]
 S_VARS = [
@@ -29,6 +34,14 @@ SAMPLE = [
     [  2,  5,  0,  1,  0,  0,  40],
     [  1,  1,  0,  0, -1,  0,   8],
     [ -1,  3,  0,  0,  0,  1,   0]
+]
+
+SAMPLE2 = [
+    [ 7,  11, 1,  0,  0,  0,  0, 77],
+    [  10,  8,  0,  1,  0,  0,  0, 80],
+    [  1,  0,  0,  0, 1,  0,   0, 9],
+    [  0,  1,  0,  0, 0,  1,   0, 6],
+    [ -150,  -175,  0,  0,  0,  0,   1, 0]
 ]
 
 class solution():
@@ -82,14 +95,18 @@ class solution():
         
         self.__initTableau = copy(matrix)
 
-    def solve(matrix:list):
+    def solve():#matrix:list):
         sample = copy(SAMPLE)
-        
+        sample2 = copy(SAMPLE2)
+
+        solution.fixNegaLastRow(sample2)
+        solution.printMatrix(sample2)
+
         #solution.printMatrix(matrix)
 
-        solution.fixNegaBasic(matrix)
+        #solution.fixNegaBasic(matrix)
 
-        solution.printMatrix(matrix)
+        #solution.printMatrix(matrix)
 
         # find largest negative in last row -> y
         # find least positive ratio -> x
@@ -142,6 +159,36 @@ class solution():
             else:
                 break
     
+    def fixNegaLastRow(matrix:list) -> int:
+        while(True):
+            
+            # find largest negative
+            col = -1
+            max = 0
+            for a in range(len(matrix[-1])-2): # -2 tanggal ans at Z cols
+                if matrix[-1][a] < max: # max negative kaya <
+                    max = matrix[-1][a]
+                    col = a
+            
+            # no more negatives in the last row
+            if col == -1:
+                return SOLVED
+
+            # find least positive ratio
+            row = -1
+            min = 0
+            for b in range(len(matrix)-1): # -1 tanggal last row
+                if matrix[b][col] > 0 and (matrix[b][-1]/matrix[b][col] < min or min == 0):
+                    min = matrix[b][-1]/matrix[b][col]
+                    row = b
+
+            # no least positive ratio
+            if row == -1:
+                return NO_ANS
+
+            # operate
+            solution.operate(matrix, row, col)
+
     def operate(matrix:list, x:int, y:int):
         n = len(matrix) # rows
         m = len(matrix[0]) # cols
