@@ -20,7 +20,7 @@ S_VARS = [
 ,[  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0,  0,  0,  0]
 ,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0]
 ,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0]
+,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0]
 ,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0]
 ,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0]
 ,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0]
@@ -29,19 +29,33 @@ S_VARS = [
 ,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1]
 ]
 
-SAMPLE = [
+SAMPLE4 = [
     [ -1,  5, -1,  0,  0,  0,  10],
     [  2,  5,  0,  1,  0,  0,  40],
     [  1,  1,  0,  0, -1,  0,   8],
     [ -1,  3,  0,  0,  0,  1,   0]
 ]
 
-SAMPLE2 = [
+SAMPLE3 = [
     [ 7,  11, 1,  0,  0,  0,  0, 77],
     [  10,  8,  0,  1,  0,  0,  0, 80],
     [  1,  0,  0,  0, 1,  0,   0, 9],
     [  0,  1,  0,  0, 0,  1,   0, 6],
     [ -150,  -175,  0,  0,  0,  0,   1, 0]
+]
+
+SAMPLE2 = [
+    [  3,  2,  5,  1,  0,  0,  0,  18],
+    [  4,  2,  3,  0,  1,  0,  0,  16],
+    [  2,  1,  1,  0,  0, -1,  0,   4],
+    [ -3, -2, -4,  0,  0,  0,  1,   0]
+]
+
+SAMPLE = [
+    [ -1, -1,  1,  0,  0,  0,  -20],
+    [ -1, -2,  0,  1,  0,  0,  -25],
+    [ -5,  1,  0,  0,  1,  0,   4],
+    [  3,  4,  0,  0,  0,  1,   0]
 ]
 
 class solution():
@@ -95,27 +109,17 @@ class solution():
         
         self.__initTableau = copy(matrix)
 
-    def solve():#matrix:list):
+    def solve(matrix:list):
         sample = copy(SAMPLE)
         sample2 = copy(SAMPLE2)
+        sample3 = copy(SAMPLE3)
 
-        solution.fixNegaLastRow(sample2)
-        solution.printMatrix(sample2)
+        solution.fixNegaBasic(matrix)
+        solution.fixNegaLastRow(matrix)
 
-        #solution.printMatrix(matrix)
-
-        #solution.fixNegaBasic(matrix)
-
-        #solution.printMatrix(matrix)
-
-        # find largest negative in last row -> y
-        # find least positive ratio -> x
-        # solve(matrix,x,y)
-        # repeat
-        
-
-
-        pass
+        solution.printMatrix(matrix)
+        print()
+        solution.findBasicSoln(matrix)
 
     def findBasicVars(matrix:list) -> list:
         basicVars = []
@@ -155,27 +159,38 @@ class solution():
                 rowIndex += 1
         
         solution.printRow(basicSolns)
-        
         return copy(basicSolns)
 
     def fixNegaBasic(matrix:list):
+        n = len(matrix)
+        m = len(matrix[0])
         while(True):
             basicVars = (solution.findBasicVars(matrix))[:-1]
             basicVars.reverse()
             leave = False
             solution.printMatrix(matrix)
+            
             input()
+            #row = int(input())
+            #column = int(input())
+            #if row < 0 or column < 0:
+            #    return
+            #solution.operate(matrix, row, column)
+
+            for a in basicVars:
+                if matrix[a[0]][a[1]] == -1:
+                    for b in range(len(matrix[a[0]])):
+                        matrix[a[0]][b] = -1*matrix[a[0]][b]
+
             for a in basicVars:
                 if matrix[a[0]][-1]/matrix[a[0]][a[1]] < 0: 
-                    for c in range(len(matrix[a[0]])):
-                        if matrix[a[0]][c] > 0 and c != a[1]:
+                    for c in range(m-1):
+                        if matrix[a[0]][c] != 0 and c != a[1]:
                             solution.operate(matrix, a[0], c)
                             leave = True
                             break
-                elif matrix[a[0]][a[1]] == -1:
-                    for b in range(len(matrix[a[0]])):
-                        matrix[a[0]][b] = -1*matrix[a[0]][b]
-                        leave = True
+                    else:
+                        return NO_ANS
                 if leave:
                     break
             else:
