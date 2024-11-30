@@ -21,7 +21,7 @@ def finder():
         toDo.append(list[e])
 
 # load food list
-csv_path = path.join('Data','Food Data.csv')
+csv_path = path.join('..','Data','Food Data.csv')
 fc.load(csv_path)
 foodNames = fc.getNames()
 
