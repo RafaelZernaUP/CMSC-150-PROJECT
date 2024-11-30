@@ -12,17 +12,20 @@ LASTROW_V = [2000,-2250,300,65,2400,300,25,-100,50,-100,5000,-50000,50,-20000,80
 class solution():
 
     def __init__(self, foods:list[fc]):
-        __initTableau: matrix
-        __workingTableaus: list[matrix]
-        __basicSolutions: list[list]
-        __Z: float
+        self.__initTableau: matrix
+        self.__workingTableaus: list[matrix] = []
+        self.__basicSolutions: list[list] = []
+        self.__Z: float
         self.constructTableau(foods)
 
-        while(True):
-            pivotElement = self.findPivotElement()
-            if pivotElement == SOLVED or pivotElement == NO_ANS:
-                break
-            self.rowReduce(pivotElement)
+        #while(True):
+        self.__initTableau.printMatrix()
+        pivotElement = self.findPivotElement()
+        print(pivotElement)
+        #if pivotElement == SOLVED or pivotElement == NO_ANS:
+        #    break
+            
+            #self.rowReduce(pivotElement)
             #self.findBasicVars()
 
     def constructTableau(self, foods:list[fc]):
@@ -36,9 +39,6 @@ class solution():
             row = [] 
             [row.extend([coeffs[b], -1*coeffs[b]]) if (b==0 or b>=5) else row.append(coeffs[b]) for b in range(len(coeffs)-1)]
             row += [1 if a==c else 0 for c in range(len(foods))] + [copy(coeffs)[-1]]
-
-            print(row)
-            print()
 
             new.setRow(a, row)
 
@@ -57,7 +57,7 @@ class solution():
         entry:int = -1
         max:float = 0
         
-        for a in range(mat.getColNum()):
+        for a in range(mat.getColNum()-1):
             if mat.getElem(-1, a) < max:
                 max = mat.getElem(-1, a)
                 entry = a
@@ -68,15 +68,15 @@ class solution():
         departure:int = -1
         min: float = 0
 
-        for b in range(mat.getRowNum()):
-            if mat.getElem(entry, b) > 0 and (mat.getElem(entry, -1) / mat.getElem(entry, b) < min or min == 0):
+        for b in range(mat.getRowNum()-1):
+            if mat.getElem(b, entry) > 0 and (mat.getElem(b, -1) / mat.getElem(b, entry) < min or min == 0):
                 departure = b
-                min = mat.getElem(entry, -1) / mat.getElem(entry, b)
+                min = mat.getElem(b, -1) / mat.getElem(b, entry)
 
         if departure == -1:
             return NO_ANS
         
-        return [entry, departure]
+        return [departure, entry]
 
     def findBasicVars(matrix:list) -> list:
         basicVars = []
