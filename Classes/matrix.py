@@ -35,8 +35,30 @@ class matrix():
         for a in range(len(self.__data[row])):
             self[row][a] -= x
 
-    def getRow(self):
+    def addRowToRow(self, row, x):
+        for a in range(len(self.__data[row])):
+            self[row][a] += x[a]
+
+    def subtractRowFromRow(self, row, x):
+        for a in range(len(self.__data[row])):
+            self[row][a] -= x[a]
+
+    def getRowNum(self):
         return self.__row
     
-    def getCol(self):
+    def getColNum(self):
         return self.__col
+    
+    def getElem(self, x, y):
+        return self.__data[x][y]
+    
+    def setElem(self, x, y, z):
+        self.__data[x][y] = z
+    
+    def setRow(self, index, row:list):
+        for a in range(len(self.__data[index])):
+            self.__data[index][a] = row[a]
+    
+    def setCol(self, index, col:list):
+        for a in range(len(self.__data)):
+            self.__data[a][index] = col[a]

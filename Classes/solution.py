@@ -6,57 +6,7 @@ SOLVED = 0
 NO_ANS = 1
 MULTI_ANS = 2
 
-ZERO_V = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 ANS_V = [2000,2250,300,65,2400,300,25,100,50,100,5000,50000,50,20000,800,1600,10,30]
-S_VARS = [
- [ -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,  0]
-,[  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1]
-]
-
-SAMPLE4 = [
-    [ -1,  5, -1,  0,  0,  0,  10],
-    [  2,  5,  0,  1,  0,  0,  40],
-    [  1,  1,  0,  0, -1,  0,   8],
-    [ -1,  3,  0,  0,  0,  1,   0]
-]
-
-SAMPLE3 = [
-    [ 7,  11, 1,  0,  0,  0,  0, 77],
-    [  10,  8,  0,  1,  0,  0,  0, 80],
-    [  1,  0,  0,  0, 1,  0,   0, 9],
-    [  0,  1,  0,  0, 0,  1,   0, 6],
-    [ -150,  -175,  0,  0,  0,  0,   1, 0]
-]
-
-SAMPLE2 = [
-    [  3,  2,  5,  1,  0,  0,  0,  18],
-    [  4,  2,  3,  0,  1,  0,  0,  16],
-    [  2,  1,  1,  0,  0, -1,  0,   4],
-    [ -3, -2, -4,  0,  0,  0,  1,   0]
-]
-
-SAMPLE = [
-    [ -1, -1,  1,  0,  0,  0,  -20],
-    [ -1, -2,  0,  1,  0,  0,  -25],
-    [ -5,  1,  0,  0,  1,  0,   4],
-    [  3,  4,  0,  0,  0,  1,   0]
-]
 
 class solution():
 
@@ -71,16 +21,6 @@ class solution():
         #solution.printMatrix(self.__initTableau)
 
     def solve(matrix:list):
-        sample = copy(SAMPLE)
-        sample2 = copy(SAMPLE2)
-        sample3 = copy(SAMPLE3)
-
-        solution.fixNegaBasic(matrix)
-        solution.fixNegaLastRow(matrix)
-
-        solution.printMatrix(matrix)
-        print()
-        solution.findBasicSoln(matrix)
 
     def findBasicVars(matrix:list) -> list:
         basicVars = []
@@ -183,42 +123,6 @@ class solution():
         return self.__basicSolutions
 
     def constructTableau(self, foods:list): # include self here later
-        matrix = []
-        coefficients = [[],[],[],[],[],[],[],[],[],[],[],[]]
-        serve_0 = []
-        for a in range(len(foods)):
-            serve_0.append(0)
-            coeffs = foods[a].getCoefficients()
-            for b in range(len(coeffs)):
-                coefficients[b].append(coeffs[b])
-
-        for c in range(len(coefficients) + len(serve_0)):
-            if c < len(coefficients) - 1:
-                if c == 0:
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c]) + copy(serve_0))
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c+1]) + copy(serve_0))
-                elif c >= 5:
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[2*c-4]) + copy(serve_0))
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[2*c-3]) + copy(serve_0))
-                else:
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c+1]) + copy(serve_0))
-            elif c < len(coefficients) - 1 + len(serve_0):
-                temp = copy(serve_0)
-                temp[c - len(coefficients) + 1] = 1
-                matrix.append(copy(temp) + copy(ZERO_V) + copy(temp))
-            else:
-                matrix.append(copy(coefficients[-1]) + copy(ZERO_V) + copy(serve_0))
-                for d in range(len(matrix)):
-                    if d < len(S_VARS):
-                        matrix[d].append(0)
-                        matrix[d].append(ANS_V[d])
-                    elif d < len(matrix) - 1:
-                        matrix[d].append(0)
-                        matrix[d].append(10)
-                    else:
-                        matrix[d].append(1)
-                        matrix[d].append(0)
-        
         self.__initTableau = copy(matrix)
 
 
