@@ -1,47 +1,55 @@
 class matrix():
-    def __init__(self, row, col):
-        __row:int = row
-        __col:int = col
-        __data:list = []
-        for a in range(row):
-            __data.append([])
-            for b in range(col):
-                __data[a].append(0)
+    DIST = "\t"
 
-    def print(self):
+    def __init__(self, row, col):
+        self.__row:int = row
+        self.__col:int = col
+        self.__data:list[list] = []
+        for a in range(row):
+            self.__data.append([])
+            for b in range(col):
+                self.__data[a].append(0)
+
+    def printMatrix(self):
         for i in self.__data:
             for j in i:
-                print(f"{j:.1f}", end="\t")
+                print(f"{j:.2f}", end=matrix.DIST)
             print()
 
-    def printRow(self, row):
-        for i in self.__data[row]:
-            print(f"{i:.1f}", end="\t")
+    def printRow(row:list):
+        for i in row:
+            print(f"{i:.2f}", end=matrix.DIST)
         print()
 
-    def multiplyRow(self, row, x):
-        for a in range(len(self.__data[row])):
-            self[row][a] *= x
+    def multiplyRow(row:list, x):
+        for a in range(len(row)):
+            row[a] *= x
+        return row
 
-    def divideRow(self, row, x):
-        for a in range(len(self.__data[row])):
-            self[row][a] /= x
+    def divideRow(row:list, x):
+        for a in range(len(row)):
+            row[a] /= x
+        return row
 
-    def addRow(self, row, x):
-        for a in range(len(self.__data[row])):
-            self[row][a] += x
+    def addRow(row:list, x):
+        for a in range(len(row)):
+            row[a] += x
+        return row
 
-    def subtractRow(self, row, x):
-        for a in range(len(self.__data[row])):
-            self[row][a] -= x
+    def subtractRow(row:list, x):
+        for a in range(len(row)):
+            row[a] -= x
+        return row
 
-    def addRowToRow(self, row, x):
-        for a in range(len(self.__data[row])):
-            self[row][a] += x[a]
+    def addRowToRow(row:list, x):
+        for a in range(len(row)):
+            row[a] += x[a]
+        return row
 
-    def subtractRowFromRow(self, row, x):
-        for a in range(len(self.__data[row])):
-            self[row][a] -= x[a]
+    def subtractRowFromRow(row:list, x):
+        for a in range(len(row)):
+            row[a] -= x[a]
+        return row
 
     def getRowNum(self):
         return self.__row

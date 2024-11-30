@@ -3,6 +3,10 @@ from server import server as sv
 from solution import solution
 from os import path
 
+chosen = []
+i_s = []
+toDo = []
+
 def chooser():
     while(True):
         for i in range(len(foodNames)):
@@ -24,11 +28,6 @@ def finder():
 csv_path = path.join('..','Data','Food Data.csv')
 fc.load(csv_path)
 foodNames = fc.getNames()
-
-
-chosen = []
-i_s = []
-toDo = []
 
 #solution.solve()
 

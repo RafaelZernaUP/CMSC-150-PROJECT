@@ -1,27 +1,47 @@
 from food import food as fc
 from copy import deepcopy as copy
+from matrix import matrix
 
 
 SOLVED = 0
 NO_ANS = 1
 MULTI_ANS = 2
 
-ANS_V = [2000,2250,300,65,2400,300,25,100,50,100,5000,50000,50,20000,800,1600,10,30]
+LASTROW_V = [2000,-2250,300,65,2400,300,25,-100,50,-100,5000,-50000,50,-20000,800,-1600,10,-30]
 
 class solution():
 
-    def __init__(self, foods:list):
-        __initTableau: list
-        __workingTableaus: list
-        __basicSolutions: list
+    def __init__(self, foods:list[fc]):
+        __initTableau: matrix
+        __workingTableaus: list[matrix]
+        __basicSolutions: list[list]
         __Z: float
         self.constructTableau(foods)
-        #self.
-        solution.solve(self.__initTableau)
-        #solution.printMatrix(self.__initTableau)
 
-    def solve(matrix:list):
+    def constructTableau(self, foods:list[fc]):
+        
+        new:matrix = matrix(len(foods)+1, len(LASTROW_V)+len(foods)+1)
 
+        for a in range(len(foods)):
+
+            coeffs = foods[a].getCoefficients()
+                
+            row = [] 
+            [row.extend([coeffs[b], -1*coeffs[b]]) if (b==0 or b>=5) else row.append(coeffs[b]) for b in range(len(coeffs)-1)]
+            row += [1 if a==c else 0 for c in range(len(foods))] + [copy(coeffs)[-1]]
+
+            print(row)
+            print()
+
+            new.setRow(a, row)
+
+        lastRow = matrix.multiplyRow(copy(LASTROW_V) + [10 for x in foods] + [0], -1)
+
+        new.setRow(len(foods), lastRow)
+
+        new.printMatrix()
+        self.__initTableau = copy(new)
+    
     def findBasicVars(matrix:list) -> list:
         basicVars = []
         for j in range(len(matrix[0])-1):
@@ -121,10 +141,6 @@ class solution():
     
     def getBasicSolutions(self):
         return self.__basicSolutions
-
-    def constructTableau(self, foods:list): # include self here later
-        self.__initTableau = copy(matrix)
-
 
     def fixNegaBasic(matrix:list):
             n = len(matrix)
