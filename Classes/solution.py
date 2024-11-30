@@ -45,7 +45,7 @@ class solution():
             #self.findBasicVars()
 
         if DEBUG:
-                print(self.__workingTableaus[-1].getElem(-1,-1))
+                matrix.printRow(matrix.getRow(self.__workingTableaus[-1], -1))
                 print(self.__Z)
 
     def constructTableau(self, foods:list[fc]):
