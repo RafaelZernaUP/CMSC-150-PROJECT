@@ -58,15 +58,27 @@ class matrix():
         return self.__col
     
     def getElem(self, x, y):
+        if x < 0:
+            x = self.__row + x
+        if y < 0:
+            y = self.__col + y
         return self.__data[x][y]
     
     def setElem(self, x, y, z):
+        if x < 0:
+            x = self.__row + x
+        if y < 0:
+            y = self.__col + y
         self.__data[x][y] = z
     
     def setRow(self, index, row:list):
+        if index < 0:
+            index = self.__row + index
         for a in range(len(self.__data[index])):
             self.__data[index][a] = row[a]
     
     def setCol(self, index, col:list):
+        if index < 0:
+            index = self.__row + index
         for a in range(len(self.__data)):
             self.__data[a][index] = col[a]

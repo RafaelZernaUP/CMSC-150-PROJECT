@@ -18,6 +18,13 @@ class solution():
         __Z: float
         self.constructTableau(foods)
 
+        while(True):
+            pivotElement = self.findPivotElement()
+            if pivotElement == SOLVED or pivotElement == NO_ANS:
+                break
+            self.rowReduce(pivotElement)
+            #self.findBasicVars()
+
     def constructTableau(self, foods:list[fc]):
         
         new:matrix = matrix(len(foods)+1, len(LASTROW_V)+len(foods)+1)
@@ -36,12 +43,41 @@ class solution():
             new.setRow(a, row)
 
         lastRow = matrix.multiplyRow(copy(LASTROW_V) + [10 for x in foods] + [0], -1)
+        new.setRow(-1, lastRow)
 
-        new.setRow(len(foods), lastRow)
-
-        new.printMatrix()
         self.__initTableau = copy(new)
     
+    def findPivotElement(self):
+        
+        if len(self.__workingTableaus) == 0:
+            mat:matrix = self.__initTableau
+        else:
+            mat:matrix = self.__workingTableaus[-1]
+        
+        entry:int = -1
+        max:float = 0
+        
+        for a in range(mat.getColNum()):
+            if mat.getElem(-1, a) < max:
+                max = mat.getElem(-1, a)
+                entry = a
+        
+        if entry == -1:
+            return SOLVED
+        
+        departure:int = -1
+        min: float = 0
+
+        for b in range(mat.getRowNum()):
+            if mat.getElem(entry, b) > 0 and (mat.getElem(entry, -1) / mat.getElem(entry, b) < min or min == 0):
+                departure = b
+                min = mat.getElem(entry, -1) / mat.getElem(entry, b)
+
+        if departure == -1:
+            return NO_ANS
+        
+        return [entry, departure]
+
     def findBasicVars(matrix:list) -> list:
         basicVars = []
         for j in range(len(matrix[0])-1):
@@ -82,38 +118,7 @@ class solution():
         solution.printRow(basicSolns)
         return copy(basicSolns)
     
-    def fixNegaLastRow(matrix:list) -> int:
-        while(True):
-            
-            solution.findBasicSoln(matrix)
-            print()
-
-            # find largest negative
-            col = -1
-            max = 0
-            for a in range(len(matrix[-1])-2): # -2 tanggal ans at Z cols
-                if matrix[-1][a] < max: # max negative kaya <
-                    max = matrix[-1][a]
-                    col = a
-            
-            # no more negatives in the last row
-            if col == -1:
-                return SOLVED
-
-            # find least positive ratio
-            row = -1
-            min = 0
-            for b in range(len(matrix)-1): # -1 tanggal last row
-                if matrix[b][col] > 0 and (matrix[b][-1]/matrix[b][col] < min or min == 0):
-                    min = matrix[b][-1]/matrix[b][col]
-                    row = b
-
-            # no least positive ratio
-            if row == -1:
-                return NO_ANS
-
-            # operate
-            solution.operate(matrix, row, col)
+    
 
     def operate(matrix:list, x:int, y:int):
         n = len(matrix) # rows
