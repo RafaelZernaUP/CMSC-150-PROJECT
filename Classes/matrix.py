@@ -4,7 +4,7 @@ class matrix():
     def __init__(self, row, col):
         self.__row:int = row
         self.__col:int = col
-        self.__data:list[list] = []
+        self.__data:list[list[float]] = []
         for a in range(row):
             self.__data.append([])
             for b in range(col):
@@ -41,12 +41,12 @@ class matrix():
             row[a] -= x
         return row
 
-    def addRowToRow(row:list, x):
+    def addRowToRow(row:list, x:list):
         for a in range(len(row)):
             row[a] += x[a]
         return row
 
-    def subtractRowFromRow(row:list, x):
+    def subtractRowFromRow(row:list, x:list):
         for a in range(len(row)):
             row[a] -= x[a]
         return row
@@ -70,6 +70,11 @@ class matrix():
         if y < 0:
             y = self.__col + y
         self.__data[x][y] = z
+
+    def getRow(self, x):
+        if x < 0:
+            x = self.__row + x
+        return self.__data[x]
     
     def setRow(self, index, row:list):
         if index < 0:

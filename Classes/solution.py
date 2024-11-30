@@ -7,7 +7,13 @@ SOLVED = 0
 NO_ANS = 1
 MULTI_ANS = 2
 
-LASTROW_V = [2000,-2250,300,65,2400,300,25,-100,50,-100,5000,-50000,50,-20000,800,-1600,10,-30]
+LASTROW_V = [-2000,2250,300,65,2400,300,-25,100,-50,100,-5000,50000,-50,20000,-800,1600,-10,30]
+
+SAMPLE = [
+    [1,7,1,0,0,14],
+    [2,6,0,1,0,20],
+    [-4,-20,0,0,1,0]
+]
 
 class solution():
 
@@ -18,31 +24,44 @@ class solution():
         self.__Z: float
         self.constructTableau(foods)
 
-        #while(True):
+        #self.__initTableau = matrix(3,6)
+        #for i in range(len(SAMPLE)):
+        #    self.__initTableau.setRow(i, SAMPLE[i])
+
         self.__initTableau.printMatrix()
-        pivotElement = self.findPivotElement()
-        print(pivotElement)
-        #if pivotElement == SOLVED or pivotElement == NO_ANS:
-        #    break
-            
-            #self.rowReduce(pivotElement)
+        while(True):
+            if len(self.__workingTableaus):
+                print(self.__workingTableaus[-1].getElem(-1,-1))
+
+            pivotElement = self.findPivotElement()
+
+            print(pivotElement)
+
+            if pivotElement == SOLVED or pivotElement == NO_ANS:
+                break
+
+            self.rowReduce(pivotElement)
+
+            self.__workingTableaus[-1].printMatrix()
+            print()
+            input()
             #self.findBasicVars()
 
     def constructTableau(self, foods:list[fc]):
         
-        new:matrix = matrix(len(foods)+1, len(LASTROW_V)+len(foods)+1)
+        new:matrix = matrix(len(foods)+1, len(LASTROW_V)+len(foods)+2)
 
         for a in range(len(foods)):
 
             coeffs = foods[a].getCoefficients()
                 
             row = [] 
-            [row.extend([coeffs[b], -1*coeffs[b]]) if (b==0 or b>=5) else row.append(coeffs[b]) for b in range(len(coeffs)-1)]
-            row += [1 if a==c else 0 for c in range(len(foods))] + [copy(coeffs)[-1]]
+            [row.extend([coeffs[b], -1*coeffs[b]]) if (b==0 or b>=5) else row.append(-1*coeffs[b]) for b in range(len(coeffs)-1)]
+            row += [1 if a==c else 0 for c in range(len(foods))] + [0] + [copy(coeffs)[-1]]
 
             new.setRow(a, row)
 
-        lastRow = matrix.multiplyRow(copy(LASTROW_V) + [10 for x in foods] + [0], -1)
+        lastRow = copy(LASTROW_V) + [10 for x in foods] + [1] + [0]
         new.setRow(-1, lastRow)
 
         self.__initTableau = copy(new)
@@ -78,6 +97,26 @@ class solution():
         
         return [departure, entry]
 
+    def rowReduce(self, pivotElement:list[int]):
+        
+        x, y = pivotElement[0], pivotElement[1]
+
+        if len(self.__workingTableaus) == 0:
+            mat:matrix = copy(self.__initTableau)
+        else:
+            mat:matrix = copy(self.__workingTableaus[-1])
+
+        pivotElementValue = mat.getElem(x, y)
+        normalized_row = matrix.divideRow(mat.getRow(x), pivotElementValue)
+
+        for a in range(mat.getRowNum()):
+            
+            if a != x:
+                row = copy(matrix.multiplyRow(copy(normalized_row), mat.getElem(a,y)))
+                matrix.subtractRowFromRow(mat.getRow(a), row)
+        
+        self.__workingTableaus.append(copy(mat))
+    
     def findBasicVars(matrix:list) -> list:
         basicVars = []
         for j in range(len(matrix[0])-1):
