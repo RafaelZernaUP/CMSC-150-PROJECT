@@ -69,45 +69,6 @@ class solution():
         #self.
         solution.solve(self.__initTableau)
         #solution.printMatrix(self.__initTableau)
-    
-    def constructTableau(self, foods:list): # include self here later
-        matrix = []
-        coefficients = [[],[],[],[],[],[],[],[],[],[],[],[]]
-        serve_0 = []
-        for a in range(len(foods)):
-            serve_0.append(0)
-            coeffs = foods[a].getCoefficients()
-            for b in range(len(coeffs)):
-                coefficients[b].append(coeffs[b])
-
-        for c in range(len(coefficients) + len(serve_0)):
-            if c < len(coefficients) - 1:
-                if c == 0:
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c]) + copy(serve_0))
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c+1]) + copy(serve_0))
-                elif c >= 5:
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[2*c-4]) + copy(serve_0))
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[2*c-3]) + copy(serve_0))
-                else:
-                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c+1]) + copy(serve_0))
-            elif c < len(coefficients) - 1 + len(serve_0):
-                temp = copy(serve_0)
-                temp[c - len(coefficients) + 1] = 1
-                matrix.append(copy(temp) + copy(ZERO_V) + copy(temp))
-            else:
-                matrix.append(copy(coefficients[-1]) + copy(ZERO_V) + copy(serve_0))
-                for d in range(len(matrix)):
-                    if d < len(S_VARS):
-                        matrix[d].append(0)
-                        matrix[d].append(ANS_V[d])
-                    elif d < len(matrix) - 1:
-                        matrix[d].append(0)
-                        matrix[d].append(10)
-                    else:
-                        matrix[d].append(1)
-                        matrix[d].append(0)
-        
-        self.__initTableau = copy(matrix)
 
     def solve(matrix:list):
         sample = copy(SAMPLE)
@@ -160,41 +121,6 @@ class solution():
         
         solution.printRow(basicSolns)
         return copy(basicSolns)
-
-    def fixNegaBasic(matrix:list):
-        n = len(matrix)
-        m = len(matrix[0])
-        while(True):
-            basicVars = (solution.findBasicVars(matrix))[:-1]
-            basicVars.reverse()
-            leave = False
-            solution.printMatrix(matrix)
-            
-            input()
-            #row = int(input())
-            #column = int(input())
-            #if row < 0 or column < 0:
-            #    return
-            #solution.operate(matrix, row, column)
-
-            for a in basicVars:
-                if matrix[a[0]][a[1]] == -1:
-                    for b in range(len(matrix[a[0]])):
-                        matrix[a[0]][b] = -1*matrix[a[0]][b]
-
-            for a in basicVars:
-                if matrix[a[0]][-1]/matrix[a[0]][a[1]] < 0: 
-                    for c in range(m-1):
-                        if matrix[a[0]][c] != 0 and c != a[1]:
-                            solution.operate(matrix, a[0], c)
-                            leave = True
-                            break
-                    else:
-                        return NO_ANS
-                if leave:
-                    break
-            else:
-                break
     
     def fixNegaLastRow(matrix:list) -> int:
         while(True):
@@ -235,8 +161,7 @@ class solution():
 
         # normalize pivot row
         pivotE = matrix[x][y]
-        for a in range(len(matrix[x])):
-            matrix[x][a] = matrix[x][a]/pivotE
+        solution.divideRow(matrix[x], pivotE)
         
         # operate on remaining rows
         for b in range(n):
@@ -256,14 +181,78 @@ class solution():
     
     def getBasicSolutions(self):
         return self.__basicSolutions
-    
-    def printMatrix(matrix:list):
-        for i in matrix:
-            for j in i:
-                print(f"{j:.1f}", end="\t")
-            print()
 
-    def printRow(list:list):
-        for i in list:
-            print(f"{i:.1f}", end="\t")
-        print()
+    def constructTableau(self, foods:list): # include self here later
+        matrix = []
+        coefficients = [[],[],[],[],[],[],[],[],[],[],[],[]]
+        serve_0 = []
+        for a in range(len(foods)):
+            serve_0.append(0)
+            coeffs = foods[a].getCoefficients()
+            for b in range(len(coeffs)):
+                coefficients[b].append(coeffs[b])
+
+        for c in range(len(coefficients) + len(serve_0)):
+            if c < len(coefficients) - 1:
+                if c == 0:
+                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c]) + copy(serve_0))
+                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c+1]) + copy(serve_0))
+                elif c >= 5:
+                    matrix.append(copy(coefficients[c]) + copy(S_VARS[2*c-4]) + copy(serve_0))
+                    matrix.append(copy(coefficients[c]) + copy(S_VARS[2*c-3]) + copy(serve_0))
+                else:
+                    matrix.append(copy(coefficients[c]) + copy(S_VARS[c+1]) + copy(serve_0))
+            elif c < len(coefficients) - 1 + len(serve_0):
+                temp = copy(serve_0)
+                temp[c - len(coefficients) + 1] = 1
+                matrix.append(copy(temp) + copy(ZERO_V) + copy(temp))
+            else:
+                matrix.append(copy(coefficients[-1]) + copy(ZERO_V) + copy(serve_0))
+                for d in range(len(matrix)):
+                    if d < len(S_VARS):
+                        matrix[d].append(0)
+                        matrix[d].append(ANS_V[d])
+                    elif d < len(matrix) - 1:
+                        matrix[d].append(0)
+                        matrix[d].append(10)
+                    else:
+                        matrix[d].append(1)
+                        matrix[d].append(0)
+        
+        self.__initTableau = copy(matrix)
+
+
+    def fixNegaBasic(matrix:list):
+            n = len(matrix)
+            m = len(matrix[0])
+            while(True):
+                basicVars = (solution.findBasicVars(matrix))[:-1]
+                basicVars.reverse()
+                leave = False
+                solution.printMatrix(matrix)
+
+                input()
+                #row = int(input())
+                #column = int(input())
+                #if row < 0 or column < 0:
+                #    return
+                #solution.operate(matrix, row, column)
+
+                for a in basicVars:
+                    if matrix[a[0]][a[1]] == -1:
+                        for b in range(len(matrix[a[0]])):
+                            matrix[a[0]][b] = -1*matrix[a[0]][b]
+
+                for a in basicVars:
+                    if matrix[a[0]][-1]/matrix[a[0]][a[1]] < 0: 
+                        for c in range(m-1):
+                            if matrix[a[0]][c] != 0 and c != a[1]:
+                                solution.operate(matrix, a[0], c)
+                                leave = True
+                                break
+                        else:
+                            return NO_ANS
+                    if leave:
+                        break
+                else:
+                    break
