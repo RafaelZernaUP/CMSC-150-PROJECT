@@ -1,5 +1,6 @@
+DIST = ""
+
 class matrix():
-    DIST = ""
 
     def __init__(self, row, col):
         self.__row:int = row
@@ -12,13 +13,12 @@ class matrix():
 
     def printMatrix(self):
         for i in self.__data:
-            for j in i:
-                print(f"{j:10.2f}", end=matrix.DIST)
+            matrix.printRow(i)
             print()
 
     def printRow(row:list[float]):
         for i in row:
-            print(f"{i:10.2f}", end=matrix.DIST)
+            print(f"{i:10.2f}", end=DIST)
         print()
 
     def multiplyRow(row:list[float], x:float):

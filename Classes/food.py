@@ -1,19 +1,17 @@
 import csv
 
-NAME = 0
-COSTPERSERVING = 1
-SERVINGSIZE = 2
-CALORIES = 3
-CHOLESTEROL = 4
-TOTALFAT = 5
-SODIUM = 6
-CARBOHYDRATES = 7
-DIETARYFIBER = 8
-PROTEIN = 9
-VITAMINA = 10
-VITAMINC = 11
-CALCIUM = 12
-IRON = 13
+COSTPERSERVING = 0
+CALORIES = 1
+CHOLESTEROL = 2
+TOTALFAT = 3
+SODIUM = 4
+CARBOHYDRATES = 5
+DIETARYFIBER = 6
+PROTEIN = 7
+VITAMINA = 8
+VITAMINC = 9
+CALCIUM = 10
+IRON = 11
 
 class food():
 
@@ -22,23 +20,23 @@ class food():
     __foodNames = []
 
     def __init__(self, data:list):
-        self.__name:str = data[NAME]
-        self.__costPerServing:float = float(data[COSTPERSERVING])
-        self.__servingSize:str = data[SERVINGSIZE]
-        self.__calories:float = float(data[CALORIES])
-        self.__cholesterol:float = float(data[CHOLESTEROL])
-        self.__totalFat:float = float(data[TOTALFAT])
-        self.__sodium:float = float(data[SODIUM])
-        self.__carbohydrates:float = float(data[CARBOHYDRATES])
-        self.__dietaryFiber:float = float(data[DIETARYFIBER])
-        self.__protein:float = float(data[PROTEIN])
-        self.__vitaminA:float = float(data[VITAMINA])
-        self.__vitaminC:float = float(data[VITAMINC])
-        self.__calcium:float = float(data[CALCIUM])
-        self.__iron:float = float(data[IRON])
+
+        self.__name:str
+        self.__servingSize:str
+        self.__coefficients: list[float] = []
+        
+        for e in range(len(data)):
+            match(e):
+                case 0:
+                    self.__name:str = data[e]
+                case 2:
+                    self.__servingSize:str = data[e]
+                case _:
+                    self.__coefficients.append(float(data[e]))
+
         food.__foodList[self.__name] = self
         food.__foodNames.append(self.__name)
-    
+        
     def load(path):
         with open(path, mode ='r') as file:
             csvFile = csv.reader(file)
@@ -54,48 +52,50 @@ class food():
     def getNames():
         return food.__foodNames
     
-    def getCoefficients(self):
-        return [
-            self.__calories,
-            self.__cholesterol,
-            self.__totalFat,
-            self.__sodium,
-            self.__carbohydrates,
-            self.__dietaryFiber,
-            self.__protein,
-            self.__vitaminA,
-            self.__vitaminC,
-            self.__calcium,
-            self.__iron,
-            self.__costPerServing
-            ]
-    
     def getHeadings():
         return food.__headings
+    
+    def getCoefficients(self):
+        return self.__coefficients[1:] + [self.__coefficients[0]]
 
     def getName(self):
         return self.__name
-    def getCost(self):
-        return self.__costPerServing
+    
     def getServingSize(self):
         return self.__servingSize
+    
+    def getCost(self):
+        return self.__coefficients[COSTPERSERVING]
+    
     def getCalories(self):
-        return self.__calories
+        return self.__coefficients[CALORIES]
+    
+    def getCholesterol(self):
+        return self.__coefficients[CHOLESTEROL]
+    
     def getFat(self):
-        return self.__totalFat
+        return self.__coefficients[TOTALFAT]
+    
     def getSodium(self):
-        return self.__sodium
+        return self.__coefficients[SODIUM]
+    
     def getCarbs(self):
-        return self.__carbohydrates
+        return self.__coefficients[CARBOHYDRATES]
+    
     def getFiber(self):
-        return self.__dietaryFiber
+        return self.__coefficients[DIETARYFIBER]
+    
     def getProtein(self):
-        return self.__protein
+        return self.__coefficients[PROTEIN]
+    
     def getVitA(self):
-        return self.__vitaminA
+        return self.__coefficients[VITAMINA]
+    
     def getVitC(self):
-        return self.__vitaminC
+        return self.__coefficients[VITAMINC]
+    
     def getCalcium(self):
-        return self.__calcium
+        return self.__coefficients[CALCIUM]
+    
     def getIron(self):
-        return self.__iron
+        return self.__coefficients[IRON]

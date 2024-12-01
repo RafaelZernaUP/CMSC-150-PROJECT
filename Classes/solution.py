@@ -1,8 +1,8 @@
-from food import food as fc
+from food import food
 from copy import deepcopy as copy
 from matrix import matrix
 
-DEBUG = True
+DEBUG = False
 
 SOLVED = 0
 NO_ANS = -1
@@ -11,9 +11,9 @@ LASTROW_V = [-2000,2250,300,65,2400,300,-25,100,-50,100,-5000,50000,-50,20000,-8
 
 class solution():
 
-    def __init__(self, foods:list[fc]):
+    def __init__(self, foods:list[food]):
         
-        self.__foods: list[fc] = copy(foods)
+        self.__foods: list[food] = copy(foods)
         self.__initTableau: matrix
         self.__workingTableaus: list[matrix] = []
         self.__basicSolutions: list[list] = []
