@@ -46,16 +46,6 @@ class server(hs.BaseHTTPRequestHandler):
         self.setResponse()
         self.wfile.write(bytes(file, 'utf-8'))
 
-    def do_POST(self):
-        
-        
-        file = open(SOLUTIONPATH).read()
-        self.setResponse()
-        self.wfile.write(bytes(file, 'utf-8'))
-
-    def stop():
-        exit()
-
     def makeIndex():
 
         indexPage = open(INDEXPATH, "w")
