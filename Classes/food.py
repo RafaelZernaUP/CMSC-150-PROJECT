@@ -1,5 +1,6 @@
 import csv
 
+# Constants for code readability
 COSTPERSERVING = 0
 CALORIES = 1
 CHOLESTEROL = 2

@@ -1,3 +1,4 @@
+# Distance between columns when printing
 DIST = ""
 
 class matrix():
