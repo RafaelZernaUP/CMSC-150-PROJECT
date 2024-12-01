@@ -1,5 +1,5 @@
 class matrix():
-    DIST = "\t"
+    DIST = ""
 
     def __init__(self, row, col):
         self.__row:int = row
@@ -13,40 +13,40 @@ class matrix():
     def printMatrix(self):
         for i in self.__data:
             for j in i:
-                print(f"{j:.2f}", end=matrix.DIST)
+                print(f"{j:10.2f}", end=matrix.DIST)
             print()
 
-    def printRow(row:list):
+    def printRow(row:list[float]):
         for i in row:
-            print(f"{i:.2f}", end=matrix.DIST)
+            print(f"{i:10.2f}", end=matrix.DIST)
         print()
 
-    def multiplyRow(row:list, x):
+    def multiplyRow(row:list[float], x:float):
         for a in range(len(row)):
             row[a] *= x
         return row
 
-    def divideRow(row:list, x):
+    def divideRow(row:list[float], x:float):
         for a in range(len(row)):
             row[a] /= x
         return row
 
-    def addRow(row:list, x):
+    def addRow(row:list[float], x:float):
         for a in range(len(row)):
             row[a] += x
         return row
 
-    def subtractRow(row:list, x):
+    def subtractRow(row:list[float], x:float):
         for a in range(len(row)):
             row[a] -= x
         return row
 
-    def addRowToRow(row:list, x:list):
+    def addRowToRow(row:list[float], x:list[float]):
         for a in range(len(row)):
             row[a] += x[a]
         return row
 
-    def subtractRowFromRow(row:list, x:list):
+    def subtractRowFromRow(row:list[float], x:list[float]):
         for a in range(len(row)):
             row[a] -= x[a]
         return row
@@ -57,32 +57,32 @@ class matrix():
     def getColNum(self):
         return self.__col
     
-    def getElem(self, x, y):
+    def getElem(self, x:int, y:int):
         if x < 0:
             x = self.__row + x
         if y < 0:
             y = self.__col + y
         return self.__data[x][y]
     
-    def setElem(self, x, y, z):
+    def setElem(self, x:int, y:int, z:float):
         if x < 0:
             x = self.__row + x
         if y < 0:
             y = self.__col + y
         self.__data[x][y] = z
 
-    def getRow(self, x):
+    def getRow(self, x:int):
         if x < 0:
             x = self.__row + x
         return self.__data[x]
     
-    def setRow(self, index, row:list):
+    def setRow(self, index:int, row:list[float]):
         if index < 0:
             index = self.__row + index
         for a in range(len(self.__data[index])):
             self.__data[index][a] = row[a]
     
-    def setCol(self, index, col:list):
+    def setCol(self, index:int, col:list[float]):
         if index < 0:
             index = self.__row + index
         for a in range(len(self.__data)):
