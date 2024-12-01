@@ -6,6 +6,9 @@ HOST = 'localhost'
 PORT = 8080
 
 class server(hs.BaseHTTPRequestHandler):
+
+    __serverThread: Thread
+
     def do_GET(self):
         file = open('index.html').read()
         self.send_response(200)
@@ -17,7 +20,10 @@ class server(hs.BaseHTTPRequestHandler):
             httpsServer.serve_forever()
 
     def start():
-        serverThread = Thread(target = server.serve, args=(hs.HTTPServer((HOST,PORT), server),))
-        #serverThread.setDaemon(True)
-        serverThread.start()
+        server.__serverThread = Thread(target = server.serve, args=(hs.HTTPServer((HOST,PORT), server),))
+        #server.__serverThread.setDaemon(True)
+        server.__serverThread.start()
         webbrowser.open(f'http://{HOST}:{PORT}', new=2)
+
+    def stop():
+        server.__serverThread.stop()
