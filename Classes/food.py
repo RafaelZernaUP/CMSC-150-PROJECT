@@ -14,18 +14,32 @@ VITAMINC = 9
 CALCIUM = 10
 IRON = 11
 
+
+
+# Food Class
+
 class food():
 
+    # Static variables
+
+    # List of all foods
     __foodList = {}
+    # Stores headings in the foods table
     __headings: list
+    # Stores all food names
     __foodNames = []
 
+    
+
+    # Constructor
     def __init__(self, data:list):
 
+        # Initializes attributes
         self.__name:str
         self.__servingSize:str
         self.__coefficients: list[float] = []
         
+        # Sets attributes given a list of data
         for e in range(len(data)):
             match(e):
                 case 0:
@@ -35,9 +49,15 @@ class food():
                 case _:
                     self.__coefficients.append(float(data[e]))
 
+        # Adds newly constructed food to static variables
         food.__foodList[self.__name] = self
         food.__foodNames.append(self.__name)
-        
+
+    # END OF CONSTRUCTOR
+    
+
+
+    # Loads all food items in a csv file
     def load(path):
         with open(path, mode ='r') as file:
             csvFile = csv.reader(file)
@@ -47,6 +67,12 @@ class food():
                     continue
                 food(line)
     
+    # END OF load()
+    
+
+
+    # Getter methods
+
     def getList():
         return food.__foodList
     
