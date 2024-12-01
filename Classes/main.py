@@ -4,67 +4,45 @@ from food import food
 from solution import solution
 from os import path
 
-chosen = []
-i_s = []
+CONSOLE = False
+
+CSVPATH = path.join('..','Data','Food Data.csv')
+food.load(CSVPATH)
+
+
+
+# For debugging using terminal
+
+chosenName = []
+chosenIndex = []
 toDo = []
 
-def chooser():
+def runOnConsole():
+
+    # Menu
     while(True):
+        foodNames = food.getNames()
         for i in range(len(foodNames)):
-            if i not in i_s:
+            if i not in chosenIndex:
                 print(f'{i+1}: {foodNames[i]}')
         choice = int(input(": "))
         if choice == 0:
-            return
-        if foodNames[choice-1] not in chosen:
-            chosen.append(foodNames[choice-1])
-            i_s.append(choice-1)
-
-def finder():
+            break
+        if foodNames[choice-1] not in chosenName:
+            chosenName.append(foodNames[choice-1])
+            chosenIndex.append(choice-1)
+    
+    # Get get chosen food objects
     list = food.getList()
-    for e in chosen:
+    for e in chosenName:
         toDo.append(list[e])
 
-# load food list
-csv_path = path.join('..','Data','Food Data.csv')
-food.load(csv_path)
-foodNames = food.getNames()
-
-#solution.solve()
-
-chooser()
-finder()
-sol = solution(toDo)
-
-tableaus = sol.getTableaus()
-basicSolns = sol.getBasicSolutions()
-
-print("\nInitial Tableau")
-sol.getInitTableau().printMatrix()
-
-for a in range(len(tableaus)):
-    print(f"\n\n\nIteration {a+1}:")
-    tableaus[a].printMatrix()
-    print("\nBasic Solution:")
-    matrix.printRow(basicSolns[a])
-
-print(f"\n\nZ: {sol.getZ()}\n")
-
-# initialize index page using food list
+    # Solve and print solution
+    sol = solution(toDo)
+    sol.printSolution()
 
 
-# start server
-#server.start()
-
-# listen for form submission
-
-# parse submission
-
-# solve and prepare solution page
-
-# set page to solution page
-
-
-
-
-#print(food.getList())
+if CONSOLE:
+    runOnConsole()
+else:
+    server.start()

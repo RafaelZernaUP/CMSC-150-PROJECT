@@ -28,7 +28,7 @@ class solution():
         self.__Z: float
         
         # Constructs and sets initial tableau
-        self.constructTableau()
+        self.__constructTableau()
 
         if DEBUG:
             self.__initTableau.printMatrix()
@@ -38,7 +38,7 @@ class solution():
         while(True):
 
             # Determines pivot element
-            pivotElement = self.findPivotElement()
+            pivotElement = self.__findPivotElement()
 
             if DEBUG:
                 print(pivotElement)
@@ -52,7 +52,7 @@ class solution():
                 break
             
             # Perform row reductions given a pivot element
-            self.rowReduce(pivotElement)
+            self.__rowReduce(pivotElement)
 
             if DEBUG:
                 self.__workingTableaus[-1].printMatrix()
@@ -67,8 +67,26 @@ class solution():
 
 
 
+    # Prints the full solution (for debugging)
+    def printSolution(self):
+
+        print("\nInitial Tableau")
+        self.__initTableau.printMatrix()
+
+        for a in range(len(self.__workingTableaus)):
+
+            print(f"\n\n\nIteration {a+1}:")
+            self.__workingTableaus[a].printMatrix()
+            
+            print("\nBasic Solution:")
+            matrix.printRow(self.__basicSolutions[a])
+
+        print(f"\n\nZ: {self.__Z}\n")
+
+
+
     # Constructs the initial tableau
-    def constructTableau(self):
+    def __constructTableau(self):
         
         # Instantiate a new matrix object (refer to matrix.py)
         new:matrix = matrix(len(self.__foods)+1, len(LASTROW_V)+2*len(self.__foods)+2)
@@ -101,7 +119,7 @@ class solution():
 
 
     # Finds the pivot element in the tableau
-    def findPivotElement(self):
+    def __findPivotElement(self):
         
         # Determines tableau to be performed on
         if len(self.__workingTableaus) == 0:
@@ -145,7 +163,7 @@ class solution():
 
 
     # Performs row reductions given a pivot element
-    def rowReduce(self, pivotElement:list[int:2]):
+    def __rowReduce(self, pivotElement:list[int:2]):
         
         # Unpacks pivot element coordinates
         x, y = pivotElement[0], pivotElement[1]
