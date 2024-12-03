@@ -46,7 +46,7 @@ class matrix():
     def printRowHTML(row:list[float]):
         toReturn = '<tr>'
         for i in row:
-            toReturn += f'<td>{i:10.2f}</td>'
+            toReturn += f'<td>{"{:.2e}".format(i)}</td>'
         toReturn += '</tr>'
         return toReturn
 

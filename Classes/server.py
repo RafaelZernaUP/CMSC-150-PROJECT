@@ -1,36 +1,28 @@
 import http.server as hs
 import webbrowser
-from threading import Thread
 from os import path
 from food import food
 from solution import solution
-from matrix import matrix
 
 HOST = 'localhost'
 PORT = 8080
 
 INDEXPATH = path.join('..','Pages','index.html')
 SOLUTIONPATH = path.join('..','Pages','solution.html')
+STYLEPATH = path.join('style.css')
 FOODNAMES = food.getNames()
 FOODLIST = food.getList()
 
 class server(hs.BaseHTTPRequestHandler):
 
-    __serverThread: Thread
-
     def setResponse(self):
         self.send_response(200)
         self.end_headers()
 
-    def serve(httpsServer:hs.HTTPServer):
-        with httpsServer:
-            httpsServer.serve_forever()
-
     def start():
         server.makeIndex()
-        server.__serverThread = Thread(target = server.serve, args=(hs.HTTPServer((HOST,PORT), server),))
-        server.__serverThread.start()
-        webbrowser.open(f'http://{HOST}:{PORT}', new=2)
+        webbrowser.open(f'http://{HOST}:{PORT}', 2)
+        hs.HTTPServer((HOST,PORT), server).serve_forever()
 
     def do_GET(self):
         if self.path == '/' or self.path == '/?':
@@ -51,7 +43,7 @@ class server(hs.BaseHTTPRequestHandler):
         indexPage = open(INDEXPATH, "w")
 
         indexPage.write(
-            f'<!DOCTYPE html><html><body>\n<form>\n'
+            f'<!DOCTYPE html><html><link rel="stylesheet" href="{STYLEPATH}"><body>\n<form>\n'
         )
 
         indexPage.write(
@@ -78,7 +70,7 @@ class server(hs.BaseHTTPRequestHandler):
         foods = sol.getFoods()
 
         solutionPage.write(
-            f'<!DOCTYPE html><html><body>\n'
+            f'<!DOCTYPE html><html><link rel="stylesheet" href="{STYLEPATH}"><body>\n'
         )
 
         solutionPage.write(
@@ -86,7 +78,7 @@ class server(hs.BaseHTTPRequestHandler):
         )
 
         solutionPage.write(
-            f'<p>You selected {len(foods)} foods to consider in your diet.</p><br>\n'
+            f'<p>You selected {len(foods)} food{'' if len(foods) == 0 else 's'} to consider in your diet.</p><br>\n'
         )
 
         for i in foods:
