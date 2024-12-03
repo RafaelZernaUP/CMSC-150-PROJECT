@@ -39,7 +39,7 @@ def runOnConsole():
 
     # Solve and print solution
     sol = solution(toDo)
-    sol.printSolution()
+    sol.printSolutionConsole()
 
 
 if CONSOLE:

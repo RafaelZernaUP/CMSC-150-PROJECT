@@ -73,14 +73,16 @@ class server(hs.BaseHTTPRequestHandler):
 
         solutionPage = open(SOLUTIONPATH, "w")
 
-        initTab = sol.getInitTableau()
-        tabs = sol.getTableaus()
         basicSols = sol.getBasicSolutions()
         z = sol.getZ()
         foods = sol.getFoods()
 
         solutionPage.write(
             f'<!DOCTYPE html><html><body>\n'
+        )
+
+        solutionPage.write(
+            f'<form action="/"><button type="submit">Return to Home</button></form></body></html>'
         )
 
         solutionPage.write(
@@ -123,10 +125,7 @@ class server(hs.BaseHTTPRequestHandler):
             solutionPage.write(
             f'</table>\n'
             )
-        
 
-        solutionPage.write(
-            f'<form action="/"><button type="submit">Return to Home</button></form></body></html>'
-        )
+        solutionPage.write(sol.printSolutionHTML())
         
         solutionPage.close()

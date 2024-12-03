@@ -24,16 +24,31 @@ class matrix():
 
 
 
-    # Print methods for matrices and rows
-    def printMatrix(self):
+    # Print methods for matrices and rows (for console debugging)
+    def printMatrixConsole(self):
         for i in self.__data:
-            matrix.printRow(i)
+            matrix.printRowConsole(i)
             print()
-    def printRow(row:list[float]):
+    def printRowConsole(row:list[float]):
         for i in row:
             print(f"{i:10.2f}", end=DIST)
         print()
-    
+
+
+
+    # Print methods for matrices and rows (for HTML pages)
+    def printMatrixHTML(self):
+        toReturn = '<table>'
+        for i in self.__data: 
+            toReturn += matrix.printRowHTML(i)
+        toReturn += '</table>'
+        return toReturn
+    def printRowHTML(row:list[float]):
+        toReturn = '<tr>'
+        for i in row:
+            toReturn += f'<td>{i:10.2f}</td>'
+        toReturn += '</tr>'
+        return toReturn
 
 
     # Row operations

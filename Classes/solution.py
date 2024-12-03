@@ -31,7 +31,7 @@ class solution():
         self.__constructTableau()
 
         if DEBUG:
-            self.__initTableau.printMatrix()
+            self.__initTableau.printMatrixConsole()
             print()
         
         # Main loop
@@ -55,33 +55,51 @@ class solution():
             self.__rowReduce(pivotElement)
 
             if DEBUG:
-                self.__workingTableaus[-1].printMatrix()
+                self.__workingTableaus[-1].printMatrixConsole()
                 print()
                 input()
 
         if DEBUG:
-                matrix.printRow(matrix.getRow(self.__workingTableaus[-1], -1))
+                matrix.printRowConsole(matrix.getRow(self.__workingTableaus[-1], -1))
                 print(self.__Z)
 
     # END OF CONSTRUCTOR
 
 
 
-    # Prints the full solution (for debugging)
-    def printSolution(self):
+    # Prints the full solution (for console debugging)
+    def printSolutionConsole(self):
 
         print("\nInitial Tableau")
-        self.__initTableau.printMatrix()
+        self.__initTableau.printMatrixConsole()
 
         for a in range(len(self.__workingTableaus)):
 
             print(f"\n\n\nIteration {a+1}:")
-            self.__workingTableaus[a].printMatrix()
+            self.__workingTableaus[a].printMatrixConsole()
             
             print("\nBasic Solution:")
-            matrix.printRow(self.__basicSolutions[a])
+            matrix.printRowConsole(self.__basicSolutions[a])
 
         print(f"\n\nZ: {self.__Z}\n")
+
+
+
+    # Prints the full solution (for HTML pages)
+    def printSolutionHTML(self):
+
+        toReturn = '<br><br><br><br>Initial Tableau<br>'
+        toReturn += f'{self.__initTableau.printMatrixHTML()}<br>'
+
+        for a in range(len(self.__workingTableaus)):
+
+            toReturn += f"<br>Iteration {a+1}:<br>"
+            toReturn += f'{self.__workingTableaus[a].printMatrixHTML()}<br>'
+            
+            toReturn += "<br>Basic Solution:<br>"
+            toReturn += f'{matrix.printRowHTML(self.__basicSolutions[a][0:-2]+self.__basicSolutions[a][-1:])}<br>'
+
+        return toReturn
 
 
 
