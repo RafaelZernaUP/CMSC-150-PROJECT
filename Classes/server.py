@@ -15,14 +15,14 @@ FOODLIST = food.getList()
 
 class server(hs.BaseHTTPRequestHandler):
 
-    def setResponse(self):
-        self.send_response(200)
-        self.end_headers()
-
     def start():
         server.makeIndex()
         webbrowser.open(f'http://{HOST}:{PORT}', 2)
         hs.HTTPServer((HOST,PORT), server).serve_forever()
+
+    def setResponse(self):
+        self.send_response(200)
+        self.end_headers()
 
     def do_GET(self):
         if self.path == '/' or self.path == '/?':
@@ -38,28 +38,23 @@ class server(hs.BaseHTTPRequestHandler):
         self.setResponse()
         self.wfile.write(bytes(file, 'utf-8'))
 
+    def writeToFile(filepath, string):
+        file = open(filepath, "w")
+        file.write(string)
+        file.close()
+
     def makeIndex():
 
-        indexPage = open(INDEXPATH, "w")
+        toWrite = ''
 
-        indexPage.write(
-            f'<!DOCTYPE html><html><link rel="stylesheet" href="{STYLEPATH}"><body>\n<form>\n'
-        )
-
-        indexPage.write(
-            f'<button type="submit">Solve</button><br>\n'
-        )
+        toWrite += f'<!DOCTYPE html><html><link rel="stylesheet" href="{STYLEPATH}"><body>\n<form>\n<button type="submit">Solve</button><br>\n'
 
         for a in range(len(FOODNAMES)):
-            indexPage.write(
-                f'<label><input type="checkbox" name="food{a}">{FOODNAMES[a]}</label><br>\n'
-            )
+            toWrite += f'<label><input type="checkbox" name="food{a}">{FOODNAMES[a]}</label><br>\n'
 
-        indexPage.write(
-            f'</form></body></html>'
-        )
+        toWrite += f'</form></body></html>'
         
-        indexPage.close()
+        server.writeToFile(INDEXPATH, toWrite)
     
     def makeSolPage(sol:solution):
 
