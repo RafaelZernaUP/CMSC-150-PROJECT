@@ -4,7 +4,7 @@ from food import food
 from solution import solution
 from os import path
 
-CONSOLE = False
+CONSOLE = False if input()==0 else True
 
 CSVPATH = path.join('..','Data','Food Data.csv')
 food.load(CSVPATH)
