@@ -6,9 +6,6 @@ from os import path
 
 CONSOLE = False if int(input())==0 else True
 
-print(CONSOLE)
-input()
-
 CSVPATH = path.join('..','Data','Food Data.csv')
 food.load(CSVPATH)
 
@@ -48,4 +45,4 @@ def runOnConsole():
 if CONSOLE:
     runOnConsole()
 else:
-    server.start()
+    server.start(int(input()))

@@ -3,39 +3,32 @@ import webbrowser
 from os import path
 from food import food
 from solution import solution
+import socket
+import mimetypes
 
-HOST = 'localhost'
+HOST = socket.getfqdn()
 PORT = 8080
 
 INDEXPATH = path.join('..','Pages','index.html')
 SOLUTIONPATH = path.join('..','Pages','solution.html')
-STYLEPATH = path.join('style.css')
+STYLEPATH = path.join('..','Pages','style.css')
 FOODNAMES = food.getNames()
 FOODLIST = food.getList()
 
 class server(hs.BaseHTTPRequestHandler):
 
-    def start():
+    def start(browser:bool):
         server.makeIndex()
-        webbrowser.open(f'http://{HOST}:{PORT}', 2)
+        if browser:
+            webbrowser.open(f'http://{HOST}:{PORT}', 2)
+        server.makeIndex()
         hs.HTTPServer((HOST,PORT), server).serve_forever()
 
-    def setResponse(self):
+    def setResponse(self, filetype, to):
         self.send_response(200)
-        self.end_headers()
-
-    def do_GET(self):
-        if self.path == '/' or self.path == '/?':
-            to = INDEXPATH
-        else:
-            to = SOLUTIONPATH
-            formData = [int(i[4:-3]) for i in self.path[2:].split('&')]
-            chosen = []
-            for a in formData:
-                chosen.append(FOODLIST[FOODNAMES[a]])
-            server.makeSolPage(solution(chosen))
         file = open(to).read()
-        self.setResponse()
+        self.send_header('Content-type', filetype)
+        self.end_headers()
         self.wfile.write(bytes(file, 'utf-8'))
 
     def writeToFile(filepath, string):
@@ -43,76 +36,81 @@ class server(hs.BaseHTTPRequestHandler):
         file.write(string)
         file.close()
 
+    def do_GET(self):
+        if self.path == '/favicon.ico':
+            pass
+        elif self.path == '/' or self.path == '/?':
+            filetype = 'text/html'
+            to = INDEXPATH
+        elif self.path == f'/style.css':
+            filetype = 'text/css'
+            to = STYLEPATH
+        elif self.path[0:6] == '/?food':
+            filetype = 'text/html'
+            to = SOLUTIONPATH
+            formData = [int(i[4:-3]) for i in self.path[2:].split('&')]
+            chosen = []
+            for a in formData:
+                chosen.append(FOODLIST[FOODNAMES[a]])
+            server.makeSolPage(solution(chosen))
+
+        self.setResponse(filetype,to)
+
     def makeIndex():
 
-        toWrite = ''
+        css = open(STYLEPATH, "r")
 
-        toWrite += f'<!DOCTYPE html><html><link rel="stylesheet" href="{STYLEPATH}"><body>\n<form>\n<button type="submit">Solve</button><br>\n'
+        toWrite = ''
+        
+        toWrite += f'<head><link rel="stylesheet", href=style.css><title>title</title></head><body>\n<form>\n<button type="submit">Solve</button><br>\n'
 
         for a in range(len(FOODNAMES)):
             toWrite += f'<label><input type="checkbox" name="food{a}">{FOODNAMES[a]}</label><br>\n'
 
-        toWrite += f'</form></body></html>'
+        toWrite += f'</form>'
+
+        toWrite += f'</body></html>'
         
         server.writeToFile(INDEXPATH, toWrite)
     
     def makeSolPage(sol:solution):
 
-        solutionPage = open(SOLUTIONPATH, "w")
-
         basicSols = sol.getBasicSolutions()
         z = sol.getZ()
         foods = sol.getFoods()
 
-        solutionPage.write(
-            f'<!DOCTYPE html><html><link rel="stylesheet" href="{STYLEPATH}"><body>\n'
-        )
+        css = open(STYLEPATH, "r")
 
-        solutionPage.write(
-            f'<form action="/"><button type="submit">Return to Home</button></form></body></html>'
-        )
+        toWrite = ''
 
-        solutionPage.write(
-            f'<p>You selected {len(foods)} food{'' if len(foods) == 0 else 's'} to consider in your diet.</p><br>\n'
-        )
+        toWrite += f'<!DOCTYPE html><html>'
+        toWrite += f'<head><link rel="stylesheet", href=style.css></head>'
+        
+        toWrite += f'<body><form action="/"><button type="submit">Return to Home</button></form></body></html>'
+        toWrite += f'<p>You selected {len(foods)} food{'' if len(foods) == 0 else 's'} to consider in your diet.</p><br>\n'
 
         for i in foods:
-            solutionPage.write(
-            f'{i.getName()}<br>\n'
-        )
+            toWrite += f'{i.getName()}<br>\n'
             
         if z == -1:
-            solutionPage.write(
-            f'<p>The problem is infeasible.</p>\n'
-            )
+            toWrite += f'<p>The problem is infeasible.</p>\n'
             
         else:
-            solutionPage.write(
-            f'<p>The cost of this optimal diet is ${z:.2f} per day.</p>\n'
-            )
+            toWrite += f'<p>The cost of this optimal diet is ${z:.2f} per day.</p>\n'
 
-            solutionPage.write(
-            f'<table>\n'
-            )
-            solutionPage.write(
-                f'<tr><td>Food</td><td>Servings</td><td>Cost($)</td></tr>\n'
-                )
+            toWrite += f'<table>\n'
+            
+            toWrite += f'<tr><td>Food</td><td>Servings</td><td>Cost($)</td></tr>\n'
 
             for a in range(len(foods)):
-                solutionPage.write(
-                f'<tr>\n'
-                )
-                solutionPage.write(
-                f'<td>{foods[a].getName()}</td><td>{basicSols[-1][-(len(foods)-a+2)]:.2f}</td><td>{basicSols[-1][-(len(foods)-a+2)]*foods[a].getCost():.2f}</td>\n'
-                )
-                solutionPage.write(
-                f'</tr>\n'
-                )
+                toWrite += f'<tr>\n'
+                toWrite += f'<td>{foods[a].getName()}</td><td>{basicSols[-1][-(len(foods)-a+2)]:.2f}</td><td>{basicSols[-1][-(len(foods)-a+2)]*foods[a].getCost():.2f}</td>\n'
+                toWrite += f'</tr>\n'
 
-            solutionPage.write(
-            f'</table>\n'
-            )
+            toWrite += f'</table>\n'
 
-        solutionPage.write(sol.printSolutionHTML())
-        
-        solutionPage.close()
+        toWrite += sol.printSolutionHTML()
+
+        toWrite += '</body></html>'
+
+        server.writeToFile(SOLUTIONPATH, toWrite)

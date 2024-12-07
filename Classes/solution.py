@@ -87,17 +87,27 @@ class solution():
 
     # Prints the full solution (for HTML pages)
     def printSolutionHTML(self):
+        foodNames =[]
 
+        for f in self.__foods:
+            foodNames.append(f.getName())
+
+        headers = [f's{x+1}' for x in range(self.__initTableau.getColNum()-len(foodNames)-1)] + [f'{b}' for b in foodNames] + ['ANS']
+        
         toReturn = '<br><br><br><br>Initial Tableau<br>'
-        toReturn += f'{self.__initTableau.printMatrixHTML()}<br>'
+        toReturn += f'{self.__initTableau.printMatrixHTML(headers)}<br>'
 
         for a in range(len(self.__workingTableaus)):
 
             toReturn += f"<br>Iteration {a+1}:<br>"
-            toReturn += f'{self.__workingTableaus[a].printMatrixHTML()}<br>'
+            toReturn += f'{self.__workingTableaus[a].printMatrixHTML(headers)}<br>'
             
             toReturn += "<br>Basic Solution:<br>"
-            toReturn += f'{matrix.printRowHTML(self.__basicSolutions[a][0:-2]+self.__basicSolutions[a][-1:])}<br>'
+
+            basSolMat = matrix(1, len(self.__basicSolutions[a][0:-2])+1)
+            basSolMat.setRow(0, self.__basicSolutions[a][0:-2]+self.__basicSolutions[a][-1:])
+
+            toReturn += f'{basSolMat.printMatrixHTML(headers)}'
 
         return toReturn
 

@@ -37,16 +37,18 @@ class matrix():
 
 
     # Print methods for matrices and rows (for HTML pages)
-    def printMatrixHTML(self):
-        toReturn = '<table>'
+    def printMatrixHTML(self, headers):
+        toReturn = '<div style="overflow-x: auto"><table>'
+        for j in headers:
+            toReturn += f'<th>{j}</th>'
         for i in self.__data: 
             toReturn += matrix.printRowHTML(i)
-        toReturn += '</table>'
+        toReturn += '</table></div>'
         return toReturn
     def printRowHTML(row:list[float]):
         toReturn = '<tr>'
         for i in row:
-            toReturn += f'<td>{"{:.2e}".format(i)}</td>'
+            toReturn += f'<td>{i}</td>'
         toReturn += '</tr>'
         return toReturn
 
