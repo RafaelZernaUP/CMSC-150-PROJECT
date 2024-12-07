@@ -92,7 +92,7 @@ class solution():
         for f in self.__foods:
             foodNames.append(f.getName())
 
-        headers = [f's{x+1}' for x in range(self.__initTableau.getColNum()-len(foodNames)-1)] + [f'{b}' for b in foodNames] + ['ANS']
+        headers = [f's{x+1}' for x in range(self.__initTableau.getColNum()-len(foodNames)-2)] + [f'{b}' for b in foodNames] + ['Z'] + ['ANS']
         
         toReturn = '<br><br><br><br>Initial Tableau<br>'
         toReturn += f'{self.__initTableau.printMatrixHTML(headers)}<br>'
@@ -107,7 +107,7 @@ class solution():
             basSolMat = matrix(1, len(self.__basicSolutions[a][0:-2])+1)
             basSolMat.setRow(0, self.__basicSolutions[a][0:-2]+self.__basicSolutions[a][-1:])
 
-            toReturn += f'{basSolMat.printMatrixHTML(headers)}'
+            toReturn += f'{basSolMat.printMatrixHTML(headers[0:-1])}'
 
         return toReturn
 

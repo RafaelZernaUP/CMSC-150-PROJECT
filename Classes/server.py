@@ -4,7 +4,6 @@ from os import path
 from food import food
 from solution import solution
 import socket
-import mimetypes
 
 HOST = socket.getfqdn()
 PORT = 8080
@@ -12,6 +11,7 @@ PORT = 8080
 INDEXPATH = path.join('..','Pages','index.html')
 SOLUTIONPATH = path.join('..','Pages','solution.html')
 STYLEPATH = path.join('..','Pages','style.css')
+SCRIPTPATH = path.join('..','Pages','script.js')
 FOODNAMES = food.getNames()
 FOODLIST = food.getList()
 
@@ -42,9 +42,15 @@ class server(hs.BaseHTTPRequestHandler):
         elif self.path == '/' or self.path == '/?':
             filetype = 'text/html'
             to = INDEXPATH
+            self.setResponse(filetype,to)
         elif self.path == f'/style.css':
             filetype = 'text/css'
             to = STYLEPATH
+            self.setResponse(filetype,to)
+        elif self.path == f'/script.js':
+            filetype = 'text/javascript'
+            to = SCRIPTPATH
+            self.setResponse(filetype,to)
         elif self.path[0:6] == '/?food':
             filetype = 'text/html'
             to = SOLUTIONPATH
@@ -53,16 +59,20 @@ class server(hs.BaseHTTPRequestHandler):
             for a in formData:
                 chosen.append(FOODLIST[FOODNAMES[a]])
             server.makeSolPage(solution(chosen))
-
-        self.setResponse(filetype,to)
+            self.setResponse(filetype,to)
+        print(self.path)
 
     def makeIndex():
 
-        css = open(STYLEPATH, "r")
-
         toWrite = ''
         
-        toWrite += f'<head><link rel="stylesheet", href=style.css><title>title</title></head><body>\n<form>\n<button type="submit">Solve</button><br>\n'
+        toWrite += f'<head><link rel="stylesheet", href=style.css><script type="text/javascript" src="script.js"></script><title>title</title></head><body>\n'
+        
+        toWrite += f'<form>\n'
+        
+        toWrite += f'<button type="submit">Solve</button>\n'
+        toWrite += f'<button type="reset">Reset</button>\n'
+        toWrite += f'<button type="button" onclick="checkAll();">Check All</button><br>\n'
 
         for a in range(len(FOODNAMES)):
             toWrite += f'<label><input type="checkbox" name="food{a}">{FOODNAMES[a]}</label><br>\n'

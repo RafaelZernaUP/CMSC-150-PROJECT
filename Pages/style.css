@@ -1,1 +1,16 @@
-table, th, tr, td {border-collapse: collapse;border: 1px solid;text-align: right;}th, tr, td{padding: 5px;}
+html
+{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: smaller;
+}
+
+table, th, tr, td
+{
+    border-collapse: collapse;
+    border: 2px solid;
+    text-align: right;
+}
+th, tr, td
+{
+    padding: 5px;
+}
