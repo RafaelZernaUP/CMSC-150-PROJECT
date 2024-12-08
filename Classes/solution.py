@@ -94,7 +94,7 @@ class solution():
 
         headers = [f's{x+1}' for x in range(self.__initTableau.getColNum()-len(foodNames)-2)] + [f'{b}' for b in foodNames] + ['Z'] + ['ANS']
         
-        toReturn = '<br><br><br><br>Initial Tableau<br>'
+        toReturn = '<br><br>Initial Tableau<br>'
         toReturn += f'{self.__initTableau.printMatrixHTML(headers)}<br>'
 
         for a in range(len(self.__workingTableaus)):

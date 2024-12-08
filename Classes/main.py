@@ -4,8 +4,6 @@ from food import food
 from solution import solution
 from os import path
 
-CONSOLE = False if int(input())==0 else True
-
 CSVPATH = path.join('..','Data','Food Data.csv')
 food.load(CSVPATH)
 
@@ -13,11 +11,13 @@ food.load(CSVPATH)
 
 # For debugging using terminal
 
-chosenName = []
-chosenIndex = []
-toDo = []
+
 
 def runOnConsole():
+
+    chosenName = []
+    chosenIndex = []
+    toDo = []
 
     # Menu
     while(True):
@@ -25,7 +25,8 @@ def runOnConsole():
         for i in range(len(foodNames)):
             if i not in chosenIndex:
                 print(f'{i+1}: {foodNames[i]}')
-        choice = int(input(": "))
+        print("0: Solve")
+        choice = int(input("Please choose an operation: "))
         if choice == 0:
             break
         if foodNames[choice-1] not in chosenName:
@@ -42,7 +43,23 @@ def runOnConsole():
     sol.printSolutionConsole()
 
 
-if CONSOLE:
-    runOnConsole()
-else:
-    server.start(int(input()))
+
+
+# Menu
+
+while True:
+    CONSOLE = input("Run on terminal? [y/n]: ").lower()
+    if CONSOLE == 'y':
+        runOnConsole()
+        break
+    elif CONSOLE == 'n':
+        while True:
+            BROWSER = input("Open browser? [y/n]: ").lower()
+            if BROWSER == 'y':
+                server.start(True)
+            elif BROWSER == 'n':
+                server.start(False)
+            else:
+                print("Invalid option. Please try again.")
+    else:
+        print("Invalid option. Please try again.")
