@@ -5,12 +5,11 @@ from food import food
 from solution import solution
 import socket
 
-# Host and port
+# CONSTANTS
 HOST = socket.getfqdn()
 PORT = 8080
-
-# Useful constants
 INDEXPATH = path.join('..','Pages','index.html')
+ICONPATH = path.join('..','Pages','favicon.ico')
 SOLUTIONPATH = path.join('..','Pages','solution.html')
 STYLEPATH = path.join('..','Pages','style.css')
 SCRIPTPATH = path.join('..','Pages','script.js')
@@ -33,10 +32,10 @@ class server(hs.BaseHTTPRequestHandler):
     # Sends file upon request
     def setResponse(self, filetype, to):
         self.send_response(200)
-        file = open(to).read()
         self.send_header('Content-type', filetype)
         self.end_headers()
-        self.wfile.write(bytes(file, 'utf-8'))
+        with open(to, 'rb') as file:
+            self.wfile.write(file.read())
 
 
     # Writes a string to a file
@@ -52,7 +51,9 @@ class server(hs.BaseHTTPRequestHandler):
         
         # Favicon
         if self.path == '/favicon.ico':
-            pass
+            filetype = 'image/x-icon'
+            to = ICONPATH
+            self.setResponse(filetype,to)
 
         # Index page
         elif self.path == '/' or self.path == '/?':
@@ -93,7 +94,7 @@ class server(hs.BaseHTTPRequestHandler):
 
         toWrite = ''
         
-        toWrite += f'<head><link rel="stylesheet", href=style.css><script type="text/javascript" src="script.js"></script><title>title</title></head><body>\n'
+        toWrite += f'<head><link rel="stylesheet", href=style.css><script type="text/javascript" src="script.js"></script><title>Diet Optimizer</title></head><body>\n'
         
         toWrite += f'<h2>WELCOME TO THE DIET OPTIMIZER</h2>'
         toWrite += f"<h3>Please choose among the given foods to include in your diet. Click 'Solve' when you are done.</h3>"
@@ -138,7 +139,7 @@ class server(hs.BaseHTTPRequestHandler):
         toWrite = ''
 
         toWrite += f'<!DOCTYPE html><html>'
-        toWrite += f'<head><link rel="stylesheet", href=style.css></head>'
+        toWrite += f'<head><link rel="stylesheet", href=style.css><title>Result</title></head>'
         
 
         # Chosen foods
@@ -149,7 +150,7 @@ class server(hs.BaseHTTPRequestHandler):
             
         # Infeasible
         if z == -1:
-            toWrite += f'<h3>The problem is infeasible.</h3>\n'
+            toWrite += f'<h3>The problem is infeasible. Please choose a different set of foods.</h3>\n'
             
         # Feasible
         else:
